@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "UniRx",
-        "R3.Unity"
+        "R3.Unity",
+        "UniTask"
     ],
     "includePlatforms": [
         "Editor"
@@ -15,7 +16,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
-        "R3.dll"
+        "R3.dll",
+        "Microsoft.Bcl.TimeProvider.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
