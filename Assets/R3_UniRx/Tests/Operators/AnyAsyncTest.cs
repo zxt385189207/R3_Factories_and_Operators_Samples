@@ -18,7 +18,7 @@ namespace R3_UniRx.Tests.Operators
     public class AnyAsyncTest
     {
         [Test]
-        public async Task R3_AnyAsyncOnNextが発行されたら即座に完了するTasに変換する()
+        public async Task R3_AnyAsync_OnNextが発行されたら即座に完了するTasに変換する()
         {
             // OnNext発行するとき
             using var subject1 = new R3.Subject<int>();

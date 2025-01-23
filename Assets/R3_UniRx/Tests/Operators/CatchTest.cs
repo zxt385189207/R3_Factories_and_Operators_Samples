@@ -29,6 +29,33 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.AreEqual(new[] { 1, 2, 3, 100 }, list);
         }
 
+        [Test]
+        public void R3_Catch_購読中のObservableが異常終了したときExceptionごとに指定したObservableに購読先を切り替える()
+        {
+            using var subject = new R3.Subject<int>();
+            var fallbackObservable = R3Observable.Return(100);
+
+            var catchObservable = subject.Catch((Exception ex) =>
+            {
+                // Exceptionの型や内容に応じてfallback先を切り替える
+                return ex switch
+                {
+                    Exception e when e.Message == "Failed" => fallbackObservable,
+                    _ => R3Observable.Empty<int>()
+                };
+            });
+
+            var list = catchObservable.ToLiveList();
+
+            subject.OnNext(1);
+            subject.OnNext(2);
+            subject.OnNext(3);
+            // OnCompleted(Exception)でfallbackObservableに切り替わる
+            subject.OnCompleted(new Exception("Failed"));
+
+            CollectionAssert.AreEqual(new[] { 1, 2, 3, 100 }, list);
+        }
+        
 
         [Test]
         public void UniRx_Catch()
