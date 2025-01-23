@@ -20,7 +20,7 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_AsObservable_Observable型に変換する()
         {
-            var subject = new R3.Subject<int>();
+        using var subject = new R3.Subject<int>();
             var castObservable = (Observable<int>)subject;
             var convertedObservable = castObservable.AsObservable();
 
@@ -36,7 +36,7 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void UniRx_AsObservable()
         {
-            var subject = new UniRx.Subject<int>();
+        using var subject = new UniRx.Subject<int>();
             var castObservable = (IObservable<int>)subject;
             var convertedObservable = castObservable.AsObservable();
 

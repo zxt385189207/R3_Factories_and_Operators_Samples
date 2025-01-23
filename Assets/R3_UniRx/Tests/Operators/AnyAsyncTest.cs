@@ -17,11 +17,39 @@ namespace R3_UniRx.Tests.Operators
 {
     public class AnyAsyncTest
     {
-        
+        [Test]
+        public async Task R3_AnyAsyncOnNextが発行されたら即座に完了するTasに変換する()
+        {
+            // OnNext発行するとき
+            using var subject1 = new R3.Subject<int>();
+
+            // OnNextが発行されたら完了するTask
+            var task = subject1.AnyAsync();
+
+            Assert.IsFalse(task.IsCompleted);
+            subject1.OnNext(0);
+            // 完了している
+            Assert.IsTrue(task.IsCompleted);
+            Assert.IsTrue(await task); // 結果はtrue
+
+            // --- 
+
+            // OnNext発行しないとき
+            using var subject2 = new R3.Subject<int>();
+            var task2 = subject2.AnyAsync();
+            Assert.IsFalse(task2.IsCompleted);
+            subject2.OnCompleted();
+
+            // 完了している
+            Assert.IsTrue(task2.IsCompleted);
+            Assert.IsFalse(await task2); // 結果はfalse
+        }
+
+
         [Test]
         public async Task R3_AnyAsync_条件を満たしたOnNextが発行されたら即座に完了するTasに変換する()
         {
-            var subject = new R3.Subject<int>();
+            using var subject = new R3.Subject<int>();
 
             // 3が発行されたか？
             // ContainsAsyncとの違いはこちらはFuncを引数に取る。
@@ -36,15 +64,14 @@ namespace R3_UniRx.Tests.Operators
             subject.OnNext(3);
             Assert.IsTrue(task.IsCompleted);
             Assert.IsTrue(await task);
-
         }
-        
-        
+
+
         [Test]
         public async Task UniRx_AnyAsyncをFirstOrDefaultで再現する()
         {
             // Anyは存在しないのでFirstOrDefaultで代用
-            var subject = new UniRx.Subject<int>();
+            using var subject = new UniRx.Subject<int>();
 
             // 3が発行されたか？
             var task = subject.FirstOrDefault(x => x == 3).Select(_ => true).DefaultIfEmpty(false).ToTask();
@@ -59,7 +86,5 @@ namespace R3_UniRx.Tests.Operators
             Assert.IsTrue(task.IsCompleted);
             Assert.IsTrue(await task);
         }
-        
-        
     }
 }

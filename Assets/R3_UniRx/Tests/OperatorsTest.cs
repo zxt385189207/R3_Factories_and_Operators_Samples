@@ -16,19 +16,6 @@ using R3Observable = R3.Observable;
 
 public sealed class OperatorsTest
 {
-    
-  
-
-   
-
-
-
-
-
-
-
-   
-
     [Test]
     public async Task DebounceFrameTest()
     {

@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_Catch_購読中のObservableが異常終了したとき指定したObservableに購読先を切り替える()
         {
-            var subject = new R3.Subject<int>();
+        using var subject = new R3.Subject<int>();
             var fallbackObservable = R3Observable.Return(100);
 
             var catchObservable = subject.Catch(fallbackObservable);
@@ -34,7 +34,7 @@ namespace R3_UniRx.Tests.Operators
         public void UniRx_Catch()
         {
             // UniRxはOnErrorでfallbackObservableに切り替わる
-            var subject = new UniRx.Subject<int>();
+        using var subject = new UniRx.Subject<int>();
             var fallbackObservable = UniRxObservable.Return(100);
 
             var catchObservable = subject.Catch<int, Exception>(_ => fallbackObservable);

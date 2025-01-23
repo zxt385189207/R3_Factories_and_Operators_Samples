@@ -18,7 +18,7 @@ namespace R3_UniRx.Tests.Operators
                 // 時間管理をFakeFrameProviderで行う
                 var fakeFrameProvider = new FakeFrameProvider();
 
-                var subject = new R3.Subject<int>();
+            using var subject = new R3.Subject<int>();
 
                 // 1フレームごとにまとめる
                 var list = subject.ChunkFrame(1, fakeFrameProvider).ToLiveList();
@@ -52,7 +52,7 @@ namespace R3_UniRx.Tests.Operators
         public IEnumerator UniRx_BatchFrame() => UniTask.ToCoroutine(async () =>
         {
             // UniRxではBatchFrame
-            var subject = new UniRx.Subject<int>();
+        using var subject = new UniRx.Subject<int>();
 
             var list = new List<IList<int>>();
             subject

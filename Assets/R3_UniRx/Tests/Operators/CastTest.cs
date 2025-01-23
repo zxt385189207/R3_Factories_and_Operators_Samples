@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
         public void R3_Cast_OnNextの型を指定した型にキャストする()
         {
             // object型が流れるSubject
-            var subject = new R3.Subject<object>();
+        using var subject = new R3.Subject<object>();
 
             // int型にキャストする
             var castObservable = subject.Cast<object, int>();
