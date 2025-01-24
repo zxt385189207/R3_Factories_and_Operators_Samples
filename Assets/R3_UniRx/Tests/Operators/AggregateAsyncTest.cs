@@ -2,8 +2,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
 using UniRx;
-using UniRxObservable = UniRx.Observable;
-using R3Observable = R3.Observable;
+
 
 namespace R3_UniRx.Tests.Operators
 {
@@ -14,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
         {
             var array = new[] { 1, 2, 3, 4, 5 };
 
-            var result = await R3Observable.ToObservable(array)
+            var result = await R3.Observable.ToObservable(array)
                 .AggregateAsync((p, c) => p + c);
 
             Assert.AreEqual(15, result);
@@ -25,7 +24,7 @@ namespace R3_UniRx.Tests.Operators
         {
             var array = new[] { 1, 2, 3, 4, 5 };
 
-            var result = await R3Observable.ToObservable(array)
+            var result = await R3.Observable.ToObservable(array)
                 .AggregateAsync(100, (p, c) => p + c); // 初期値は100から始める
 
             Assert.AreEqual(115, result);
@@ -36,7 +35,7 @@ namespace R3_UniRx.Tests.Operators
         {
             var array = new[] { 1, 2, 3, 4, 5 };
 
-            var result = await R3Observable.ToObservable(array)
+            var result = await R3.Observable.ToObservable(array)
                 .AggregateAsync(100, (p, c) => p + c, result => result * 100); // 結果を100倍する
 
             Assert.AreEqual(11500, result);
@@ -47,7 +46,7 @@ namespace R3_UniRx.Tests.Operators
         {
             var array = new[] { 1, 2, 3, 4, 5 };
 
-            var result = await UniRxObservable.ToObservable(array)
+            var result = await UniRx.Observable.ToObservable(array)
                 .Aggregate((p, c) => p + c)
                 .ToTask();
 

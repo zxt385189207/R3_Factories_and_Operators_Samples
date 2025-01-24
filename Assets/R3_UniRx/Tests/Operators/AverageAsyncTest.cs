@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
 using UniRx;
-using UniRxObservable = UniRx.Observable;
-using R3Observable = R3.Observable;
+
 
 namespace R3_UniRx.Tests.Operators
 {
@@ -15,7 +14,7 @@ namespace R3_UniRx.Tests.Operators
         {
             var array = new[] { 1, 2, 3, 4, 5 };
 
-            var result = await R3Observable.ToObservable(array)
+            var result = await R3.Observable.ToObservable(array)
                 .AverageAsync();
 
             Assert.AreEqual(3.0, result);
@@ -30,7 +29,7 @@ namespace R3_UniRx.Tests.Operators
             var array = new[] { new Data(1), new Data(2), new Data(3), new Data(4), new Data(5) };
 
             // Valueプロパティを指定して平均値を求める
-            var result = await R3Observable.ToObservable(array)
+            var result = await R3.Observable.ToObservable(array)
                 .AverageAsync(x => x.Value);
 
             Assert.AreEqual(3.0, result);
@@ -43,7 +42,7 @@ namespace R3_UniRx.Tests.Operators
 
             var array = new[] { 1, 2, 3, 4, 5 };
 
-            var result = await UniRxObservable.ToObservable(array)
+            var result = await UniRx.Observable.ToObservable(array)
                 .ToArray()
                 .ToTask();
 

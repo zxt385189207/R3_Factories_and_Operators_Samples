@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using R3;
 using UniRx;
-using UniRxObservable = UniRx.Observable;
-using R3Observable = R3.Observable;
+
 
 namespace R3_UniRx.Tests.Operators
 {
@@ -14,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
         public void R3_Catch_購読中のObservableが異常終了したとき指定したObservableに購読先を切り替える()
         {
         using var subject = new R3.Subject<int>();
-            var fallbackObservable = R3Observable.Return(100);
+            var fallbackObservable = R3.Observable.Return(100);
 
             var catchObservable = subject.Catch(fallbackObservable);
 
@@ -33,7 +32,7 @@ namespace R3_UniRx.Tests.Operators
         public void R3_Catch_購読中のObservableが異常終了したときExceptionごとに指定したObservableに購読先を切り替える()
         {
             using var subject = new R3.Subject<int>();
-            var fallbackObservable = R3Observable.Return(100);
+            var fallbackObservable = R3.Observable.Return(100);
 
             var catchObservable = subject.Catch((Exception ex) =>
             {
@@ -41,7 +40,7 @@ namespace R3_UniRx.Tests.Operators
                 return ex switch
                 {
                     Exception e when e.Message == "Failed" => fallbackObservable,
-                    _ => R3Observable.Empty<int>()
+                    _ => R3.Observable.Empty<int>()
                 };
             });
 
@@ -62,7 +61,7 @@ namespace R3_UniRx.Tests.Operators
         {
             // UniRxはOnErrorでfallbackObservableに切り替わる
         using var subject = new UniRx.Subject<int>();
-            var fallbackObservable = UniRxObservable.Return(100);
+            var fallbackObservable = UniRx.Observable.Return(100);
 
             var catchObservable = subject.Catch<int, Exception>(_ => fallbackObservable);
 

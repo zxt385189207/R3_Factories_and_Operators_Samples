@@ -10,23 +10,12 @@ using R3.Collections;
 using UniRx;
 using UnityEngine.TestTools;
 using Observable = UniRx.Observable;
-using UniRxObservable = UniRx.Observable;
-using R3Observable = R3.Observable;
+
 
 
 public sealed class OperatorsTest
 {
-    [Test]
-    public async Task DebounceFrameTest()
-    {
-        Assert.Fail();
-    }
-
-    [Test]
-    public async Task DefaultIfEmptyTest()
-    {
-        Assert.Fail();
-    }
+  
 
     [Test]
     public async Task DelayTest()

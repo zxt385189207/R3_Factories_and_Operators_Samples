@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
 using UniRx;
-using R3Observable = R3.Observable;
 
 namespace R3_UniRx.Tests.Operators
 {
@@ -13,7 +12,7 @@ namespace R3_UniRx.Tests.Operators
         {
             // 2つのObservableを同時に購読し、値が先着した方のObservableのみを採択する。
 
-            var o1 = R3Observable.Create<int>(async (observer, ct) =>
+            var o1 = R3.Observable.Create<int>(async (observer, ct) =>
                 {
                     // 100ms待ってから値を発行
                     await Task.Delay(100, ct);
@@ -24,7 +23,7 @@ namespace R3_UniRx.Tests.Operators
                     observer.OnCompleted();
                 });
 
-            var o2 = R3Observable.Create<int>(async (observer, _) =>
+            var o2 = R3.Observable.Create<int>(async (observer, _) =>
             {
                 // 即座に発行
                 observer.OnNext(4);
@@ -34,7 +33,7 @@ namespace R3_UniRx.Tests.Operators
                 observer.OnCompleted();
             });
 
-            var result = await R3Observable.Amb(o1, o2).ToArrayAsync();
+            var result = await R3.Observable.Amb(o1, o2).ToArrayAsync();
 
             // o2が先着しているのでo2の値が採択される
             CollectionAssert.AreEqual(new[] { 4, 5, 6 }, result);

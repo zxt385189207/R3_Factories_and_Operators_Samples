@@ -2,8 +2,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
 using UniRx;
-using UniRxObservable = UniRx.Observable;
-using R3Observable = R3.Observable;
 
 namespace R3_UniRx.Tests.Operators
 {
@@ -12,7 +10,7 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_AsUnitObservableTest_UnitなObservableに変換する()
         {
-            var observable = R3Observable.Range(1, 3);
+            var observable = R3.Observable.Range(1, 3);
 
             // Unitに変換
             var result = await observable.AsUnitObservable().ToArrayAsync();
@@ -24,7 +22,7 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task UniRx_AsUnitObservable()
         {
-            var observable = UniRxObservable.Range(1, 3);
+            var observable = UniRx.Observable.Range(1, 3);
 
             // Unitに変換
             var result = await observable.AsUnitObservable().ToArray().ToTask();

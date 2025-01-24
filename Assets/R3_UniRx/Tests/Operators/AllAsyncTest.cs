@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
 using UniRx;
-using UniRxObservable = UniRx.Observable;
-using R3Observable = R3.Observable;
+
 
 namespace R3_UniRx.Tests.Operators
 {
@@ -17,12 +16,12 @@ namespace R3_UniRx.Tests.Operators
             var array = new[] { 1, 2, 3, 4, 5 };
 
             // ぜんぶ正の値か? => true
-            var result1 = await R3Observable.ToObservable(array)
+            var result1 = await R3.Observable.ToObservable(array)
                 .AllAsync(x => x > 0);
             Assert.IsTrue(result1);
 
             // 3を含んでいないか? => false
-            var result2 = await R3Observable.ToObservable(array)
+            var result2 = await R3.Observable.ToObservable(array)
                 .AllAsync(x => x != 3);
             Assert.IsFalse(result2);
         }
@@ -34,13 +33,13 @@ namespace R3_UniRx.Tests.Operators
             var array = new[] { 1, 2, 3, 4, 5 };
 
             // ぜんぶ正の値か? => true
-            var result1 = await UniRxObservable.ToObservable(array)
+            var result1 = await UniRx.Observable.ToObservable(array)
                 .ToArray()
                 .ToTask();
             Assert.IsTrue(result1.All(x => x > 0));
 
             // 3を含んでいないか? => false
-            var result2 = await UniRxObservable.ToObservable(array)
+            var result2 = await UniRx.Observable.ToObservable(array)
                 .ToArray()
                 .ToTask();
             Assert.IsFalse(result2.All(x => x != 3));

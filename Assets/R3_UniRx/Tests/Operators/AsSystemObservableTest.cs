@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using R3;
-using R3Observable = R3.Observable;
 
 namespace R3_UniRx.Tests.Operators
 {
@@ -13,7 +12,7 @@ namespace R3_UniRx.Tests.Operators
             // R3のObservable<T>からSystem.IObservable<T>へと変換する。
 
             // R3
-            var observable = R3Observable.Range(1, 3);
+            var observable = R3.Observable.Range(1, 3);
 
             // R3 -> System.IObservable(UniRx)
             var systemObservable = observable.AsSystemObservable();
