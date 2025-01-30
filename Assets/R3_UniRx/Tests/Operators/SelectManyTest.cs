@@ -11,9 +11,10 @@ namespace R3_UniRx.Tests.Operators
     public sealed class SelectManyTest
     {
         [Test]
-        public async Task R3_SelectMany_新しいObservableを生成して並列に合成する()
+        public void R3_SelectMany_新しいObservableを生成して並列に合成する()
         {
             using var subject = new R3.Subject<int>();
+            var fakeFrameProvider = new FakeFrameProvider();
 
             var list = subject.SelectMany(CreateObservable).ToLiveList();
             
@@ -21,8 +22,8 @@ namespace R3_UniRx.Tests.Operators
             subject.OnNext(2);
             subject.OnNext(3);
 
-            // 処理の実行開始に1Fかかるので、1+3F待つ
-            await UniTask.DelayFrame(4);
+            // 3F進む
+            fakeFrameProvider.Advance(3);
 
             CollectionAssert.AreEqual(new[] { 1, 2, 3, 2, 3, 3 }, list);
             return;
@@ -37,7 +38,7 @@ namespace R3_UniRx.Tests.Operators
                 {
                     for (int i = 0; i < x; i++)
                     {
-                        await UniTask.DelayFrame(1, cancellationToken: ct);
+                        await fakeFrameProvider.WaitAsync(ct: ct);
                         observer.OnNext(x);
                     }
 

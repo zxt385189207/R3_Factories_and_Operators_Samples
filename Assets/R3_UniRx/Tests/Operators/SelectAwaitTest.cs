@@ -9,16 +9,18 @@ namespace R3_UniRx.Tests.Operators
     public sealed class SelectAwaitTest
     {
         [Test]
-        public async Task R3_SelectAwait_入力値を非同期で変換して出力する_Sequential()
+        public void R3_SelectAwait_入力値を非同期で変換して出力する_Sequential()
         {
             using var subject = new R3.Subject<int>();
 
+            var fakeFrameProvider = new FakeFrameProvider();
+            
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Sequentialなので、1つの要素が完了してから次の要素を処理する
             var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
-                    await UniTask.DelayFrame(x, cancellationToken: ct);
+                    await fakeFrameProvider.WaitAsync(x, ct);
                     return x;
                 }, AwaitOperation.Sequential)
                 .ToLiveList();
@@ -31,7 +33,7 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.IsEmpty(list);
 
             // 1F待つ
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // 1F経過したので1が出力される
             CollectionAssert.AreEqual(new[] { 1 }, list);
@@ -39,29 +41,30 @@ namespace R3_UniRx.Tests.Operators
             // --このタイミングではまだ2F待機の実行中--
 
             // 1F目の待機
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // まだ結果が出力されていない
             CollectionAssert.AreEqual(new[] { 1 }, list);
 
             // 2F目の待機
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // 結果が出力される
             CollectionAssert.AreEqual(new[] { 1, 2 }, list);
         }
 
         [Test]
-        public async Task R3_SelectAwait_入力値を非同期で変換して出力する_Parallel()
+        public void R3_SelectAwait_入力値を非同期で変換して出力する_Parallel()
         {
             using var subject = new R3.Subject<int>();
+            var fakeFrameProvider = new FakeFrameProvider();
 
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Parallelなので一斉に処理を行う
             var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
-                    await UniTask.DelayFrame(x, cancellationToken: ct);
+                    await fakeFrameProvider.WaitAsync(x, ct);
                     return x;
                 }, AwaitOperation.Parallel)
                 .ToLiveList();
@@ -77,32 +80,33 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.IsEmpty(list);
 
             // 1F待つ
-            await UniTask.DelayFrame(1);
-
+            fakeFrameProvider.Advance();
+            
             CollectionAssert.AreEqual(new[] { 1 }, list);
 
             // 2F目の待機
-            await UniTask.DelayFrame(1);
-
+            fakeFrameProvider.Advance();
+            
             CollectionAssert.AreEqual(new[] { 1, 2 }, list);
 
             // 3F目の待機
-            await UniTask.DelayFrame(1);
-
+            fakeFrameProvider.Advance();
+            
             CollectionAssert.AreEqual(new[] { 1, 2, 3 }, list);
         }
 
         [Test]
-        public async Task R3_SelectAwait_入力値を非同期で変換して出力する_SequentialParallel()
+        public void R3_SelectAwait_入力値を非同期で変換して出力する_SequentialParallel()
         {
             using var subject = new R3.Subject<int>();
-
+            var fakeFrameProvider = new FakeFrameProvider();
+            
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Parallelなので一斉に処理を行う
             var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
-                    await UniTask.DelayFrame(x, cancellationToken: ct);
+                    await fakeFrameProvider.WaitAsync(x, ct);
                     return x;
                 }, AwaitOperation.SequentialParallel)
                 .ToLiveList();
@@ -117,35 +121,36 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.IsEmpty(list);
 
             // 1F待つ
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // 処理は1つ終わっているはずだが、まだ出力されない
             CollectionAssert.IsEmpty(list);
 
             // 2F目の待機
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // [2]の処理は先頭なので、終わったタイミングでまず出力される
             CollectionAssert.AreEqual(new[] { 2 }, list);
 
             // 3F目の待機
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // [3]が終わったので出力され、続いて[1]が出力される
             CollectionAssert.AreEqual(new[] { 2, 3, 1 }, list);
         }
 
         [Test]
-        public async Task R3_SelectAwait_入力値を非同期で変換して出力する_Switch()
+        public void R3_SelectAwait_入力値を非同期で変換して出力する_Switch()
         {
             using var subject = new R3.Subject<int>();
-
+            var fakeFrameProvider = new FakeFrameProvider();
+            
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Switchは新しい入力が来たら、前の処理をキャンセルして新しい処理を開始する
             var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
-                    await UniTask.DelayFrame(x, cancellationToken: ct);
+                    await fakeFrameProvider.WaitAsync(x, ct);
                     return x;
                 }, AwaitOperation.Switch)
                 .ToLiveList();
@@ -156,7 +161,7 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.IsEmpty(list);
 
             // 1F待つ
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // [3]の処理中だが次の入力が来たのでキャンセルされ、[2]が処理される
             subject.OnNext(2);
@@ -165,7 +170,7 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.IsEmpty(list);
 
             // 2F目の待機
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // [2]の処理中だが次の入力が来たのでキャンセルされ、[1]が処理される
             subject.OnNext(1);
@@ -174,23 +179,24 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.IsEmpty(list);
 
             // 3F目の待機
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // [1]が終わったので出力される
             CollectionAssert.AreEqual(new[] { 1 }, list);
         }
 
         [Test]
-        public async Task R3_SelectAwait_入力値を非同期で変換して出力する_Drop()
+        public void R3_SelectAwait_入力値を非同期で変換して出力する_Drop()
         {
             using var subject = new R3.Subject<int>();
-
+            var fakeFrameProvider = new FakeFrameProvider();
+            
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Dropは現在の非同期処理を優先し、新しい入力は無視する
             var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
-                    await UniTask.DelayFrame(x, cancellationToken: ct);
+                    await fakeFrameProvider.WaitAsync(x, ct);
                     return x;
                 }, AwaitOperation.Drop)
                 .ToLiveList();
@@ -203,29 +209,30 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.IsEmpty(list);
 
             // 1F待つ
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // まだ出力されない
             CollectionAssert.IsEmpty(list);
 
             // 2F目の待機
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // [2]が完了
             CollectionAssert.AreEqual(new[] { 2 }, list);
 
             // しばらく待ってみる
-            await UniTask.DelayFrame(5);
+            fakeFrameProvider.Advance();
 
             // 結果は変わらず
             CollectionAssert.AreEqual(new[] { 2 }, list);
         }
 
         [Test]
-        public async Task R3_SelectAwait_入力値を非同期で変換して出力する_ThrottleFirstLast()
+        public void R3_SelectAwait_入力値を非同期で変換して出力する_ThrottleFirstLast()
         {
             using var subject = new R3.Subject<int>();
-
+            var fakeFrameProvider = new FakeFrameProvider();
+            
             var asyncMethodList = new List<int>();
 
             // 入力されたフレーム数だけ待機してから、結果を出力する
@@ -236,7 +243,7 @@ namespace R3_UniRx.Tests.Operators
                     asyncMethodList.Add(x);
 
                     // xフレーム待つ
-                    await UniTask.DelayFrame(x, cancellationToken: ct);
+                    await fakeFrameProvider.WaitAsync(x, ct);
                     return x;
                 }, AwaitOperation.ThrottleFirstLast)
                 .ToLiveList();
@@ -249,23 +256,24 @@ namespace R3_UniRx.Tests.Operators
             CollectionAssert.IsEmpty(list);
 
             // 1F待つ
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
+            
             // まだ結果が出力されていない
             CollectionAssert.IsEmpty(list);
 
             // 2F目の待機
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // [2]
             CollectionAssert.AreEqual(new[] { 2 }, list);
 
             // --- ここから[3]の処理が開始される ---
 
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
             CollectionAssert.AreEqual(new[] { 2 }, list);
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
             CollectionAssert.AreEqual(new[] { 2 }, list);
-            await UniTask.DelayFrame(1);
+            fakeFrameProvider.Advance();
 
             // [3] が終わったので出力される
             CollectionAssert.AreEqual(new[] { 2, 3 }, list);
