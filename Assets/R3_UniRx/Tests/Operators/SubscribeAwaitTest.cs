@@ -228,6 +228,7 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void UniRx_SubscribeAwaitは存在しない()
         {
+            Assert.Ignore();
         }
     }
 }

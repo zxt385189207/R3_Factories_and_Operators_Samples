@@ -7,6 +7,9 @@ using UniRx;
 
 namespace R3_UniRx.Tests.Operators
 {
+    /*
+     * 補足: Observable.Return()は購読した瞬間に同期的にOnNextを発行する
+     */
     public sealed class SubscribeOn
     {
         [Test]
