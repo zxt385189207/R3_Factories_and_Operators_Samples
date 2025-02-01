@@ -7,34 +7,29 @@ using UniRx;
 
 namespace R3_UniRx.Tests.Operators
 {
-    public sealed class SkipUntilTest
+    public sealed class TakeUntilTest
     {
         [Test]
-        public void R3_SkipUntil_Taskが完了するまでの間はOnNextを無視しつづける()
+        public void R3_TakeUntil_Taskが完了したらOnCompletedを発行する()
         {
             using var subject = new R3.Subject<int>();
 
             var taskCompletionSource = new TaskCompletionSource<int>();
             var task = taskCompletionSource.Task;
 
-            var results = subject.SkipUntil(task).ToLiveList();
+            var results = subject.TakeUntil(task).Materialize().ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
             taskCompletionSource.TrySetResult(0); // 完了
-            subject.OnNext(3);
-            subject.OnNext(4);
-            subject.OnCompleted();
 
-            CollectionAssert.AreEqual(new[]
-            {
-                3,
-                4
-            }, results);
+            Assert.AreEqual(1, results[0].Value);
+            Assert.AreEqual(2, results[1].Value);
+            Assert.AreEqual(R3.NotificationKind.OnCompleted, results[2].Kind);
         }
-        
+
         [Test]
-        public void R3_SkipUntil_非同期処理が完了するまでの間はOnNextを無視しつづける()
+        public void R3_TakeUntil_非同期処理が完了したらOnCompletedを発行する()
         {
             using var subject = new R3.Subject<int>();
 
@@ -44,28 +39,26 @@ namespace R3_UniRx.Tests.Operators
             // 呼び出された数値を記録
             var calledList = new List<int>();
 
-            // 非同期処理が完了するまでの間はOnNextを無視しつづける
+            // 非同期処理が完了するまでの間はOnNextを通過させる
             // 非同期処理は最初に到達したOnNextの値を用いて1つだけ実行される
-            var results = subject.SkipUntil(async (x, ct) =>
+            // 非同期処理は実行中であってもOnNextは通過する
+            var results = subject.TakeUntil(async (x, ct) =>
                 {
                     calledList.Add(x);
                     await task;
                 })
+                .Materialize()
                 .ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
             taskCompletionSource.TrySetResult(0); // 完了
-            subject.OnNext(3);
-            subject.OnNext(4);
-            subject.OnCompleted();
 
-            CollectionAssert.AreEqual(new[]
-            {
-                3,
-                4
-            }, results);
+            Assert.AreEqual(1, results[0].Value);
+            Assert.AreEqual(2, results[1].Value);
+            Assert.AreEqual(R3.NotificationKind.OnCompleted, results[2].Kind);
 
+            // 実行された非同期処理は[1]のみ
             CollectionAssert.AreEqual(new[]
             {
                 1,
@@ -73,75 +66,60 @@ namespace R3_UniRx.Tests.Operators
         }
 
         [Test]
-        public void R3_SkipUntil_CancellationTokenがキャンセルされるまでOnNextを無視しつづける()
+        public void R3_TakeUntil_CancellationTokenがキャンセルされたらOnCompletedを発行する()
         {
             using var subject = new R3.Subject<int>();
 
             using var cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = cancellationTokenSource.Token;
 
-            var results = subject.SkipUntil(cancellationToken).ToLiveList();
+            var results = subject.TakeUntil(cancellationToken).Materialize().ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
             cancellationTokenSource.Cancel(); // キャンセル
-            subject.OnNext(3);
-            subject.OnNext(4);
-            subject.OnCompleted();
-
-            CollectionAssert.AreEqual(new[]
-            {
-                3,
-                4
-            }, results);
+            
+            Assert.AreEqual(1, results[0].Value);
+            Assert.AreEqual(2, results[1].Value);
+            Assert.AreEqual(R3.NotificationKind.OnCompleted, results[2].Kind);
         }
 
         [Test]
-        public void R3_SkipUntil_他のObservableのOnNextが発行されるまではOnNextを無視する()
+        public void R3_TakeUntil_他のObservableのOnNextが発行されたらOnCompletedを発行する()
         {
             using var subject = new R3.Subject<int>();
 
             using var otherSubject = new R3.Subject<int>();
 
-            var results = subject.SkipUntil(otherSubject).ToLiveList();
+            var results = subject.TakeUntil(otherSubject).Materialize().ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
             otherSubject.OnNext(0); // 発行
-            subject.OnNext(3);
-            subject.OnNext(4);
-            subject.OnCompleted();
 
-            CollectionAssert.AreEqual(new[]
-            {
-                3,
-                4
-            }, results);
+            Assert.AreEqual(1, results[0].Value);
+            Assert.AreEqual(2, results[1].Value);
+            Assert.AreEqual(R3.NotificationKind.OnCompleted, results[2].Kind);
         }
 
         [Test]
-        public void UniRx_SkipUntil()
+        public void UniRx_TakeUntil()
         {
             using var subject = new UniRx.Subject<int>();
 
             using var otherSubject = new UniRx.Subject<int>();
 
-            var list = new List<int>();
+            var list = new List<UniRx.Notification<int>>();
 
-           subject.SkipUntil(otherSubject).Subscribe(list.Add);
+            subject.TakeUntil(otherSubject).Materialize().Subscribe(list.Add);
 
             subject.OnNext(1);
             subject.OnNext(2);
             otherSubject.OnNext(0); // 発行
-            subject.OnNext(3);
-            subject.OnNext(4);
-            subject.OnCompleted();
 
-            CollectionAssert.AreEqual(new[]
-            {
-                3,
-                4
-            }, list);
+            Assert.AreEqual(1, list[0].Value);
+            Assert.AreEqual(2, list[1].Value);
+            Assert.AreEqual(UniRx.NotificationKind.OnCompleted, list[2].Kind);
         }
     }
 }
