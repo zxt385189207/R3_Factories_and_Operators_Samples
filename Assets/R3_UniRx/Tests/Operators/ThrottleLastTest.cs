@@ -15,7 +15,7 @@ namespace R3_UniRx.Tests.Operators
         {
             using var subject = new R3.Subject<int>();
 
-            // 一度OnNextが到達したら次以降のOnNextを300ms間無視する
+            // 一度OnNextが到達したらOnNextを300ms間無視して、最後に発行されたOnNextを発行する
             var results = subject.ThrottleLast(TimeSpan.FromMilliseconds(300), TimeProvider.System).ToLiveList();
 
             subject.OnNext(1); // 遮断開始
@@ -107,9 +107,9 @@ namespace R3_UniRx.Tests.Operators
         public async Task UniRx_Sample()
         {
             // UniRxではSampleが同じ意味を持つOperator
-
+            
             using var subject = new UniRx.Subject<int>();
-
+            
             var results = new List<int>();
             
             // 一度OnNextが到達したら次以降のOnNextを300ms間無視する
