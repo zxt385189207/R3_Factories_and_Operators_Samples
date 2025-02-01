@@ -27,9 +27,24 @@ namespace R3_UniRx.Tests.Operators
         }
 
         [Test]
-        public void UniRx_DistinctByに相当するものは存在しない()
+        public void UniRx_Distinct()
         {
-            Assert.Ignore();
+            var subject = new UniRx.Subject<int>();
+
+            var list = new List<int>();
+            
+            // 3で割った余りで重複を除外する
+            subject.Distinct(x => x % 3).Subscribe(list.Add);
+            
+            subject.OnNext(1);
+            subject.OnNext(2);
+            subject.OnNext(3);
+            subject.OnNext(2);
+            subject.OnNext(1);
+            subject.OnNext(3);
+            subject.OnNext(4);
+
+            CollectionAssert.AreEqual(new[] { 1, 2, 3 }, list.ToArray());
         }
     }
 }
