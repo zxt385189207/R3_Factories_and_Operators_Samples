@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
 using NUnit.Framework;
 using R3;
 
@@ -16,7 +14,7 @@ namespace R3_UniRx.Tests.Operators
             var fakeFrameProvider = new FakeFrameProvider();
             
             // 入力されたフレーム数だけ待機してから、結果を出力する
-            // Sequentialなので、1つの要素が完了してから次の要素を処理する
+            // Sequential、1つの要素が完了してから次の要素を処理する
             var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
@@ -60,7 +58,7 @@ namespace R3_UniRx.Tests.Operators
             var fakeFrameProvider = new FakeFrameProvider();
 
             // 入力されたフレーム数だけ待機してから、結果を出力する
-            // Parallelなので一斉に処理を行う
+            // Parallel、一斉に処理を行う
             var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
@@ -102,7 +100,7 @@ namespace R3_UniRx.Tests.Operators
             var fakeFrameProvider = new FakeFrameProvider();
             
             // 入力されたフレーム数だけ待機してから、結果を出力する
-            // Parallelなので一斉に処理を行う
+            // Parallel、一斉に処理を行う
             var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
