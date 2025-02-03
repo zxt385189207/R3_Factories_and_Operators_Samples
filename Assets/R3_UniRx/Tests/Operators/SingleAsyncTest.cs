@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -11,10 +12,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_SingleAsync_条件を満たす値が1つである場合にその値を返す()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             using var subject = new R3.Subject<int>();
             
             // 3は1つだけである
-            var task = subject.SingleAsync(x => x == 3);
+            var task = subject.SingleAsync(x => x == 3, cancellationToken: ct);
             
             subject.OnNext(1);
             subject.OnNext(2);
@@ -37,12 +41,15 @@ namespace R3_UniRx.Tests.Operators
         }
         
         [Test]
-        public async Task R3_SingleAsync_条件を満たす値が2つ以上発行された場合はInvalidOperationException()
+        public void R3_SingleAsync_条件を満たす値が2つ以上発行された場合はInvalidOperationException()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             using var subject = new R3.Subject<int>();
             
             // 3は1つだけである
-            var task = subject.SingleAsync(x => x == 3);
+            var task = subject.SingleAsync(x => x == 3, cancellationToken: ct);
             
             subject.OnNext(1);
             subject.OnNext(2);
@@ -63,12 +70,15 @@ namespace R3_UniRx.Tests.Operators
         }
         
         [Test]
-        public async Task R3_SingleAsync_条件を満たす値が0個の場合はInvalidOperationException()
+        public void R3_SingleAsync_条件を満たす値が0個の場合はInvalidOperationException()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             using var subject = new R3.Subject<int>();
             
             // 3は1つだけである
-            var task = subject.SingleAsync(x => x == 3);
+            var task = subject.SingleAsync(x => x == 3, cancellationToken: ct);
             
             subject.OnNext(1);
             subject.OnNext(2);
@@ -88,10 +98,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void UniRx_Single()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             var subject = new UniRx.Subject<int>();
             
             // 3は1つだけである
-            var task = subject.Single(x => x == 3).ToTask();
+            var task = subject.Single(x => x == 3).ToTask(ct);
             
             subject.OnNext(1);
             subject.OnNext(2);

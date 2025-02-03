@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -12,9 +13,12 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_MinAsync_OnNextから最小値を取り出しその結果となる値を返す()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+           
             using var subject = new R3.Subject<Data>();
 
-            var task = subject.MinAsync(x => x.Value);
+            var task = subject.MinAsync(x => x.Value, cancellationToken: ct);
 
             // まだ完了していない
             Assert.IsFalse(task.IsCompleted);
@@ -39,10 +43,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_MinAsync_値が存在しない場合は例外()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             using var subject = new R3.Subject<Data>();
 
             // Task<Data>ではなくTask<int>になっている
-            Task<int> task = subject.MinAsync(x => x.Value);
+            Task<int> task = subject.MinAsync(x => x.Value, cancellationToken: ct);
 
             // まだ完了していない
             Assert.IsFalse(task.IsCompleted);

@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -12,10 +13,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_MinMaxAsync_最大値と最小値を得る()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             using var subject = new R3.Subject<Data>();
             
             // Task<(int Min, int Max)>である
-            Task<(int Min, int Max)> task = subject.MinMaxAsync(x => x.Value);
+            Task<(int Min, int Max)> task = subject.MinMaxAsync(x => x.Value, cancellationToken: ct);
             
             // まだ完了していない
             Assert.IsFalse(task.IsCompleted);

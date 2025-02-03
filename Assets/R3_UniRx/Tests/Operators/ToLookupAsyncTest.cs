@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using R3;
 using UniRx;
@@ -11,9 +12,12 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_ToLookupAsync_Lookupに変換する()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             var subject = new R3.Subject<(int Key, string Value)>();
 
-            var task = subject.ToLookupAsync(x => x.Key, x => x.Value);
+            var task = subject.ToLookupAsync(x => x.Key, x => x.Value, cancellationToken: ct);
 
             subject.OnNext((1, "a"));
             subject.OnNext((1, "b"));

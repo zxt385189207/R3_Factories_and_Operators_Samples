@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -11,7 +12,10 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_ToAsyncEnumerable_IAsyncEnumerableに変換する()
         {
-            var asyncEnumerable = Observable.Range(1, 5).ToAsyncEnumerable();
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
+            var asyncEnumerable = Observable.Range(1, 5).ToAsyncEnumerable(cancellationToken: ct);
 
             var results = new List<int>();
             

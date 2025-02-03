@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -10,10 +11,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_WaitAsync_完了を待つ()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             using var subject = new R3.Subject<int>();
 
             // WaitAsyncはOnNext値は返さない
-            var task = subject.WaitAsync();
+            var task = subject.WaitAsync(cancellationToken: ct);
 
             subject.OnNext(1);
 

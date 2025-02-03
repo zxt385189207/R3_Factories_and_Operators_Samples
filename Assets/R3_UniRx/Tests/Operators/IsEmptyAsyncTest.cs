@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -10,15 +11,18 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_IsEmptyAsync_シーケンスが空であるか()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             {
                 // OnNextがある場合は空ではない
-                var result = await R3.Observable.Return(1).IsEmptyAsync();
+                var result = await R3.Observable.Return(1).IsEmptyAsync(cancellationToken: ct);
                 Assert.IsFalse(result);
             }
 
             {
                 // OnCompletedのみは空判定
-                var result = await R3.Observable.Empty<int>().IsEmptyAsync();
+                var result = await R3.Observable.Empty<int>().IsEmptyAsync(cancellationToken: ct);
                 Assert.IsTrue(result);
             }
         }
@@ -26,13 +30,16 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task UniRx_IsEmptyAsyncは存在しないのでSingleOrDefaultで代替する()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             {
                 // OnNextがある場合は空ではない
                 var result = await UniRx.Observable.Return(1)
                     .Select(_ => true)
                     .SingleOrDefault()
                     .DefaultIfEmpty(false)
-                    .ToTask();
+                    .ToTask(ct);
 
                 Assert.IsTrue(result);
             }
@@ -43,7 +50,7 @@ namespace R3_UniRx.Tests.Operators
                     .Select(_ => true)
                     .SingleOrDefault()
                     .DefaultIfEmpty(false)
-                    .ToTask();
+                    .ToTask(ct);
 
                 Assert.IsFalse(result);
             }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -11,10 +12,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_LastAsync_一番最後に条件を満たしたOnNextを待つ()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             using var subject = new R3.Subject<int>();
 
             // 3以上の最初の要素を取得する
-            var task = subject.LastAsync(x => x >= 3);
+            var task = subject.LastAsync(x => x >= 3, cancellationToken: ct);
 
             // まだ完了していない
             Assert.IsFalse(task.IsCompleted);
@@ -39,10 +43,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_LastAsync_条件を満たす要素が存在しない場合は例外()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             using var subject = new R3.Subject<int>();
 
             // 3以上の最初の要素を取得する
-            var task = subject.LastAsync(x => x >= 3);
+            var task = subject.LastAsync(x => x >= 3, cancellationToken: ct);
 
             // まだ完了していない
             Assert.IsFalse(task.IsCompleted);

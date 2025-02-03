@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using R3;
 using UniRx;
@@ -11,9 +12,12 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_ToHashSetAsync_HashSetに変換する()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             using var subject = new R3.Subject<int>();
 
-            var task = subject.ToHashSetAsync();
+            var task = subject.ToHashSetAsync(cancellationToken: ct);
 
             subject.OnNext(1);
             subject.OnNext(2);

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading;
 using NUnit.Framework;
 using R3;
 using UniRx;
@@ -12,11 +12,14 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_ForEachAsync_購読処理自体をTask化する()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             using var subject = new R3.Subject<int>();
             var list = new List<int>();
 
             // Subscribe()とほぼ同等に扱えるが、戻り値がTaskである
-            var subscriptionTask = subject.ForEachAsync(x => list.Add(x));
+            var subscriptionTask = subject.ForEachAsync(x => list.Add(x), cancellationToken: ct);
 
             // まだ完了していない
             Assert.IsFalse(subscriptionTask.IsCompleted);
@@ -36,6 +39,7 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void UniRx_ForEachAsync_UniRxのForEachAsyncはR3と挙動が異なる()
         {
+            
             using var subject = new UniRx.Subject<int>();
             var list = new List<int>();
             var isSubscriptionCompleted = false;

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -10,10 +11,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_ElementAtAsync_購読開始から指定した個数目の要素を取り出す()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             using var subject = new R3.Subject<int>();
 
             // 4番目の要素を取得する(ゼロオリジン）
-            var task = subject.ElementAtAsync(3);
+            var task = subject.ElementAtAsync(3, cancellationToken: ct);
 
             // まだ完了していない
             Assert.IsFalse(task.IsCompleted);
@@ -33,10 +37,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_ElementAtAsync_個数が足りない場合は例外()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             using var subject = new R3.Subject<int>();
 
             // 3番目の要素を取得する
-            var task = subject.ElementAtAsync(3);
+            var task = subject.ElementAtAsync(3, cancellationToken: ct);
 
             // まだ完了していない
             Assert.IsFalse(task.IsCompleted);

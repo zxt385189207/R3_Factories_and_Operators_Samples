@@ -1,3 +1,4 @@
+using System.Threading;
 using NUnit.Framework;
 using R3;
 using UniRx;
@@ -9,9 +10,12 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public void R3_ToArrayAsync_配列に変換する()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+
             using var subject = new R3.Subject<int>();
 
-            var task = subject.ToArrayAsync();
+            var task = subject.ToArrayAsync(cancellationToken: ct);
 
             subject.OnNext(1);
             subject.OnNext(2);

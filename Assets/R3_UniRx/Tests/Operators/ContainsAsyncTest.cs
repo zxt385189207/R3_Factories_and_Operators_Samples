@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using R3;
@@ -10,11 +11,14 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_ContainsAsync_指定した値を含んだOnNextが発行されたら即座に完了するTaskに変換する()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             using var subject = new R3.Subject<int>();
 
             // 3が発行されたか？
             // AnyAsyncとの違いはこちらは値そのものを引数に取る。
-            var task = subject.ContainsAsync(3);
+            var task = subject.ContainsAsync(3, cancellationToken: ct);
 
             subject.OnNext(1);
             Assert.IsFalse(task.IsCompleted);
@@ -31,10 +35,13 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task UniRx_FirstOrDefaultで再現する()
         {
+            // キャンセルすることはないが、CancellationTokenは準備しておく
+            var ct = CancellationToken.None;
+            
             using var subject = new UniRx.Subject<int>();
 
             // 3が発行されたか？
-            var task = subject.FirstOrDefault(x => x == 3).Select(_ => true).DefaultIfEmpty(false).ToTask();
+            var task = subject.FirstOrDefault(x => x == 3).Select(_ => true).DefaultIfEmpty(false).ToTask(ct);
 
             subject.OnNext(1);
             Assert.IsFalse(task.IsCompleted);
