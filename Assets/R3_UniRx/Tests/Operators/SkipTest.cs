@@ -35,17 +35,17 @@ namespace R3_UniRx.Tests.Operators
 
             var observable = R3.Observable.Create<int>(async (observer, ct) =>
             {
-                // 最初に1を流して、100ms待って2, 3, 4を流す
+                // 最初に1を流して、200ms待って2, 3, 4を流す
                 observer.OnNext(1);
-                await Task.Delay(100, ct);
+                await Task.Delay(200, ct);
                 observer.OnNext(2);
                 observer.OnNext(3);
                 observer.OnNext(4);
                 observer.OnCompleted();
             });
 
-            // 購読開始から200ms以内の値を無視
-            var results = observable.Skip(TimeSpan.FromMilliseconds(200), TimeProvider.System).ToLiveList();
+            // 購読開始から100ms以内の値を無視
+            var results = observable.Skip(TimeSpan.FromMilliseconds(100), TimeProvider.System).ToLiveList();
 
             await Task.Delay(500);
 
