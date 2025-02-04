@@ -33,7 +33,7 @@ namespace R3_UniRx.Tests.Operators
                 observer.OnCompleted();
             });
 
-            var result = await R3.Observable.Amb(o1, o2).ToArrayAsync();
+            var result = await o1.Amb(o2).ToArrayAsync();
 
             // o2が先着しているのでo2の値が採択される
             CollectionAssert.AreEqual(new[] { 4, 5, 6 }, result);
