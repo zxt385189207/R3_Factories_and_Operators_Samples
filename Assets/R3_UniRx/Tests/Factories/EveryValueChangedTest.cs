@@ -25,7 +25,7 @@ namespace R3_UniRx.Tests.Factories
             var data = new Data(0);
 
             // [data]のもつ[Value]プロパティを毎フレーム監視して、値が変更されたらその値を発行する
-            var list = Observable.EveryValueChanged(data, d => d.Value, fakeFrameProvider, cts.Token)
+            using var list = Observable.EveryValueChanged(data, d => d.Value, fakeFrameProvider, cts.Token)
                 .Materialize()
                 .ToLiveList();
 

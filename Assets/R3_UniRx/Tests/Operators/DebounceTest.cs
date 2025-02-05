@@ -18,7 +18,7 @@ namespace R3_UniRx.Tests.Operators
 
             // 連続して値が発行された場合は値が落ち着いてから100ms後に最後の値を発行する
             // -> OnNextがまとめて発行されたときに、最後に値が発行されてから一定時間経過後に最後のOnNextを1つだけ発行する。
-            var list = subject.Debounce(TimeSpan.FromMilliseconds(100), TimeProvider.System).ToLiveList();
+            using var list = subject.Debounce(TimeSpan.FromMilliseconds(100), TimeProvider.System).ToLiveList();
             // 本来はFakeTimeProviderを使ってテストしたいがUnityでうまく動作しない
             // そのためTaskで実時間を用いてテストする
 
@@ -47,7 +47,7 @@ namespace R3_UniRx.Tests.Operators
 
             // 発行された値をもとに非同期処理を実行し、それが完了したら最後に発行された値を１つ発行する
             // 非同期処理が完了後は次に値が発行されるまで待機する
-            var list = subject.Debounce(async (value, ct) =>
+            using var list = subject.Debounce(async (value, ct) =>
                 {
                     // 100ms待機(valueは使わない）
                     await Task.Delay(100, ct);

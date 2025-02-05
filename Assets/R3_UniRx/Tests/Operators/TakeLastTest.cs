@@ -15,7 +15,7 @@ namespace R3_UniRx.Tests.Operators
             var subject = new R3.Subject<int>();
 
             // 最後の2つだけ通過
-            var list = subject.TakeLast(2).ToLiveList();
+            using var list = subject.TakeLast(2).ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
@@ -37,7 +37,7 @@ namespace R3_UniRx.Tests.Operators
             var subject = new R3.Subject<int>();
 
             // 完了時に最後から400ms以内だけ通過
-            var list = subject.TakeLast(TimeSpan.FromMilliseconds(400), TimeProvider.System).ToLiveList();
+            using var list = subject.TakeLast(TimeSpan.FromMilliseconds(400), TimeProvider.System).ToLiveList();
 
             subject.OnNext(1); // -900 ms
             await Task.Delay(300);

@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
             using var first = new R3.Subject<int>();
             using var second = new R3.Subject<string>();
 
-            var list = first.Zip(second, (x, y) => x + y).ToLiveList();
+            using var list = first.Zip(second, (x, y) => x + y).ToLiveList();
 
             // first側入力
             first.OnNext(1);

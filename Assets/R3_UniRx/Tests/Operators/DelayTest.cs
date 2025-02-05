@@ -15,7 +15,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 100ms遅らせる
-            var list = subject.Delay(TimeSpan.FromMilliseconds(100), TimeProvider.System).Materialize().ToLiveList();
+            using var list = subject.Delay(TimeSpan.FromMilliseconds(100), TimeProvider.System).Materialize().ToLiveList();
 
             subject.OnNext(1);
             CollectionAssert.IsEmpty(list); // まだ発行されていない

@@ -63,7 +63,7 @@ namespace R3_UniRx.Tests.Operators
             using var disposable = connectableObservable.Connect();
 
             // 購読開始
-            var list = connectableObservable.ToLiveList();
+            using var list = connectableObservable.ToLiveList();
 
             subject.OnNext("a");
             subject.OnNext("b");

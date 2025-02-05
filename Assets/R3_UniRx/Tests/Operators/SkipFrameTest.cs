@@ -17,7 +17,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 購読開始から2フレーム目までのOnNextを無視
-            var list = subject.SkipFrame(2, fakeFrameProvider).ToLiveList();
+            using var list = subject.SkipFrame(2, fakeFrameProvider).ToLiveList();
             
             
             subject.OnNext(1); // 1F目、無視

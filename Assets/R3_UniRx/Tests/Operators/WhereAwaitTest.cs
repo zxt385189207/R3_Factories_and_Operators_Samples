@@ -16,7 +16,7 @@ namespace R3_UniRx.Tests.Operators
             // 入力値が偶数のみを通す
             // ただし結果の判定にはその数値分だけのフレーム待機が必要
             // Sequential、1つの要素が完了してから次の要素を処理する
-            var list = subject.WhereAwait(async (x, ct) =>
+            using var list = subject.WhereAwait(async (x, ct) =>
                 {
                     await fakeFrameProvider.WaitAsync(x, ct);
                     return x % 2 == 0;
@@ -71,7 +71,7 @@ namespace R3_UniRx.Tests.Operators
             // 入力値が偶数のみを通す
             // ただし結果の判定にはその数値分だけのフレーム待機が必要
             // Sequential、1つの要素が完了してから次の要素を処理する
-            var list = subject.WhereAwait(async (x, ct) =>
+            using var list = subject.WhereAwait(async (x, ct) =>
                 {
                     await fakeFrameProvider.WaitAsync(x, ct);
                     return x % 2 == 0;
@@ -119,7 +119,7 @@ namespace R3_UniRx.Tests.Operators
             // 入力値が偶数のみを通す
             // ただし結果の判定にはその数値分だけのフレーム待機が必要
             // Sequential、1つの要素が完了してから次の要素を処理する
-            var list = subject.WhereAwait(async (x, ct) =>
+            using var list = subject.WhereAwait(async (x, ct) =>
                 {
                     await fakeFrameProvider.WaitAsync(x, ct);
                     return x % 2 == 0;
@@ -169,7 +169,7 @@ namespace R3_UniRx.Tests.Operators
             // 入力値が偶数のみを通す
             // ただし結果の判定にはその数値分だけのフレーム待機が必要
             // Switch、非同期処理が実行中の場合はそれをキャンセルして次の処理にすぐ乗り換える
-            var list = subject.WhereAwait(async (x, ct) =>
+            using var list = subject.WhereAwait(async (x, ct) =>
                 {
                     await fakeFrameProvider.WaitAsync(x, ct);
                     return x % 2 == 0;
@@ -216,7 +216,7 @@ namespace R3_UniRx.Tests.Operators
             // 入力値が偶数のみを通す
             // ただし結果の判定にはその数値分だけのフレーム待機が必要
             // Drop、非同期処理が実行中は新しい入力を条件によらずに無視する
-            var list = subject.WhereAwait(async (x, ct) =>
+            using var list = subject.WhereAwait(async (x, ct) =>
                 {
                     await fakeFrameProvider.WaitAsync(x, ct);
                     return x % 2 == 0;
@@ -262,7 +262,7 @@ namespace R3_UniRx.Tests.Operators
             // 入力値が偶数のみを通す
             // ただし結果の判定にはその数値分だけのフレーム待機が必要
             // ThrottleFirstLast、最初の入力を優先して非同期処理を行い、結果としては最後の入力も出力する
-            var list = subject.WhereAwait(async (x, ct) =>
+            using var list = subject.WhereAwait(async (x, ct) =>
                 {
                     asyncMethodList.Add(x);
 

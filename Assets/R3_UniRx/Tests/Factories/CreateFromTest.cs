@@ -35,7 +35,7 @@ namespace R3_UniRx.Tests.Factories
                 // IAsyncEnumerable<int>を作成し、それをObservableに変換する
                 var observable = Observable.CreateFrom(ct => CreateAsyncEnumerable(fakeFrameProvider, 1, ct));
 
-                var list = observable.ToLiveList();
+                using var list = observable.ToLiveList();
 
                 CollectionAssert.IsEmpty(list);
                 fakeFrameProvider.Advance();
@@ -78,7 +78,7 @@ namespace R3_UniRx.Tests.Factories
                     Observable.CreateFrom((data, fakeFrameProvider),
                         (ct, v) => CreateAsyncEnumerable(v.fakeFrameProvider, v.data.Value, ct));
 
-                var list = observable.ToLiveList();
+                using var list = observable.ToLiveList();
 
                 CollectionAssert.IsEmpty(list);
                 fakeFrameProvider.Advance(3);

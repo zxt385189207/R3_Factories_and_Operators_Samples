@@ -17,7 +17,7 @@ namespace R3_UniRx.Tests.Operators
 
             using var subject = new R3.Subject<string>();
 
-            var list = subject.FrameCount(fakeFrameProvider).ToLiveList();
+            using var list = subject.FrameCount(fakeFrameProvider).ToLiveList();
 
             subject.OnNext("A");
             fakeFrameProvider.Advance();

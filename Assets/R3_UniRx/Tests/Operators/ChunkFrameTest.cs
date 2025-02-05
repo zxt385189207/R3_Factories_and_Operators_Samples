@@ -20,7 +20,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 1フレームごとにまとめる
-            var list = subject.ChunkFrame(1, fakeFrameProvider).ToLiveList();
+            using var list = subject.ChunkFrame(1, fakeFrameProvider).ToLiveList();
 
             // 1F目
             subject.OnNext(1);
@@ -54,7 +54,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 1フレームごとにまとめるが、3個溜まったら一度出力する
-            var list = subject.ChunkFrame(1, 3, fakeFrameProvider).ToLiveList();
+            using var list = subject.ChunkFrame(1, 3, fakeFrameProvider).ToLiveList();
 
             // 1F目
             subject.OnNext(1);

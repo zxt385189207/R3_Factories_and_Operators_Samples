@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 3Fだけ通過
-            var list = subject.TakeFrame(3, fakeFrameProvider).Materialize().ToLiveList();
+            using var list = subject.TakeFrame(3, fakeFrameProvider).Materialize().ToLiveList();
 
             subject.OnNext(1);
             fakeFrameProvider.Advance();

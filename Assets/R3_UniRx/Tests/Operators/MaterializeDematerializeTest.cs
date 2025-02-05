@@ -14,7 +14,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // LiveListはOnNextのみを記録する
-            var list = subject.Materialize().ToLiveList();
+            using var list = subject.Materialize().ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
@@ -41,7 +41,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             var expectedList = subject.IgnoreOnErrorResume().ToLiveList();
-            var list = subject.Materialize().Dematerialize().IgnoreOnErrorResume().ToLiveList();
+            using var list = subject.Materialize().Dematerialize().IgnoreOnErrorResume().ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);

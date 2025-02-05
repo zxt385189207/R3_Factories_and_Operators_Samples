@@ -11,7 +11,7 @@ namespace R3_UniRx.Tests.Factories
             var firstObservable = Observable.Range(1, 3);
             var secondObservable = Observable.Range(4, 3);
 
-            var list = Observable.Concat(firstObservable, secondObservable).ToLiveList();
+            using var list = Observable.Concat(firstObservable, secondObservable).ToLiveList();
 
             CollectionAssert.AreEqual(new[] { 1, 2, 3, 4, 5, 6 }, list);
         }

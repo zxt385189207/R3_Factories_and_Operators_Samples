@@ -14,7 +14,7 @@ namespace R3_UniRx.Tests.Operators
             var firstSubject = new R3.Subject<int>();
             var secondSubject = new R3.Subject<int>();
 
-            var list = firstSubject.Merge(secondSubject).ToLiveList();
+            using var list = firstSubject.Merge(secondSubject).ToLiveList();
 
             // ごちゃまぜに発行
             firstSubject.OnNext(1);

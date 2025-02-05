@@ -15,7 +15,7 @@ namespace R3_UniRx.Tests.Operators
             
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Sequential、1つの要素が完了してから次の要素を処理する
-            var list = subject.SelectAwait(async (x, ct) =>
+            using var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
                     await fakeFrameProvider.WaitAsync(x, ct);
@@ -59,7 +59,7 @@ namespace R3_UniRx.Tests.Operators
 
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Parallel、一斉に処理を行う
-            var list = subject.SelectAwait(async (x, ct) =>
+            using var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
                     await fakeFrameProvider.WaitAsync(x, ct);
@@ -101,7 +101,7 @@ namespace R3_UniRx.Tests.Operators
             
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Parallel、一斉に処理を行う
-            var list = subject.SelectAwait(async (x, ct) =>
+            using var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
                     await fakeFrameProvider.WaitAsync(x, ct);
@@ -145,7 +145,7 @@ namespace R3_UniRx.Tests.Operators
             
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Switchは新しい入力が来たら、前の処理をキャンセルして新しい処理を開始する
-            var list = subject.SelectAwait(async (x, ct) =>
+            using var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
                     await fakeFrameProvider.WaitAsync(x, ct);
@@ -191,7 +191,7 @@ namespace R3_UniRx.Tests.Operators
             
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // Dropは現在の非同期処理を優先し、新しい入力は無視する
-            var list = subject.SelectAwait(async (x, ct) =>
+            using var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // xフレーム待つ
                     await fakeFrameProvider.WaitAsync(x, ct);
@@ -235,7 +235,7 @@ namespace R3_UniRx.Tests.Operators
 
             // 入力されたフレーム数だけ待機してから、結果を出力する
             // ThrottleFirstLastは最初の入力を優先して非同期処理を行い、結果としては最後の入力も出力する
-            var list = subject.SelectAwait(async (x, ct) =>
+            using var list = subject.SelectAwait(async (x, ct) =>
                 {
                     // 実行された順番を記録
                     asyncMethodList.Add(x);

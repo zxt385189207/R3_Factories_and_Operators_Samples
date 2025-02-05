@@ -16,7 +16,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
             var fakeFrameProvider = new FakeFrameProvider();
 
-            var list = subject.SelectMany(CreateObservable).ToLiveList();
+            using var list = subject.SelectMany(CreateObservable).ToLiveList();
             
             subject.OnNext(1);
             subject.OnNext(2);

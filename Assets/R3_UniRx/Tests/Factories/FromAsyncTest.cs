@@ -24,7 +24,7 @@ namespace R3_UniRx.Tests.Factories
 
             var observable = Observable.FromAsync(ct => MethodAsync(utcs.Task, ct));
 
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             CollectionAssert.IsEmpty(list);
 
@@ -45,7 +45,7 @@ namespace R3_UniRx.Tests.Factories
                 return 100;
             });
 
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
             CollectionAssert.AreEqual(new[] { 100 }, list);
         }
     }

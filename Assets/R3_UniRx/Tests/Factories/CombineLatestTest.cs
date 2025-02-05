@@ -11,7 +11,7 @@ namespace R3_UniRx.Tests.Factories
             using var first = new R3.Subject<int>();
             using var second = new R3.Subject<string>();
 
-            var list = Observable.CombineLatest(first, second, (x, y) => x + y).ToLiveList();
+            using var list = Observable.CombineLatest(first, second, (x, y) => x + y).ToLiveList();
 
             // first側入力
             first.OnNext(1);

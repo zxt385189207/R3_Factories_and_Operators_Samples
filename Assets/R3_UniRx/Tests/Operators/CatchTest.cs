@@ -17,7 +17,7 @@ namespace R3_UniRx.Tests.Operators
 
             var catchObservable = subject.Catch(fallbackObservable);
 
-            var list = catchObservable.ToLiveList();
+            using var list = catchObservable.ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
@@ -44,7 +44,7 @@ namespace R3_UniRx.Tests.Operators
                 };
             });
 
-            var list = catchObservable.ToLiveList();
+            using var list = catchObservable.ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);

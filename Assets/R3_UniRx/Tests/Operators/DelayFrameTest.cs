@@ -19,7 +19,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 1F遅らせる
-            var list = subject.DelayFrame(1, fakeFrameProvider).Materialize().ToLiveList();
+            using var list = subject.DelayFrame(1, fakeFrameProvider).Materialize().ToLiveList();
 
             subject.OnNext(1);
             CollectionAssert.IsEmpty(list); // まだ発行されていない

@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 2倍する
-            var list = subject.Select(x => x * 2).ToLiveList();
+            using var list = subject.Select(x => x * 2).ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
@@ -31,7 +31,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 2倍する
-            var list = subject.Select((x, index) => (x * 2, index)).ToLiveList();
+            using var list = subject.Select((x, index) => (x * 2, index)).ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);

@@ -25,13 +25,13 @@ namespace R3_UniRx.Tests.Operators
             var compositeDisposable = new R3.CompositeDisposable();
 
             // 購読者一人目
-            var list1 = secondObservable.ToLiveList();
+            using var list1 = secondObservable.ToLiveList();
             compositeDisposable.Add(list1);
 
             subject.OnNext("b"); // 0 
 
             // 購読者二人目
-            var list2 = secondObservable.ToLiveList();
+            using var list2 = secondObservable.ToLiveList();
             compositeDisposable.Add(list2);
 
             subject.OnNext("c"); // 1
@@ -57,7 +57,7 @@ namespace R3_UniRx.Tests.Operators
             subject.OnNext("d"); // Indexは稼働していない
 
             // 新しい購読者が参加
-            var list3 = secondObservable.ToLiveList();
+            using var list3 = secondObservable.ToLiveList();
 
             subject.OnNext("e"); // 0　Indexが初期化されている
 
@@ -94,7 +94,7 @@ namespace R3_UniRx.Tests.Operators
             var list2 = new List<(int, string)>();
             var d2 = secondObservable.Subscribe(list2.Add);
             compositeDisposable.Add(d2);
-            
+
             subject.OnNext("c"); // 1
 
             // 一人目はIndex = 0, 1が流れている
@@ -118,7 +118,7 @@ namespace R3_UniRx.Tests.Operators
             subject.OnNext("d"); // Indexは稼働していない
 
             // 新しい購読者が参加
-            
+
             var list3 = new List<(int, string)>();
             secondObservable.Subscribe(list3.Add);
 

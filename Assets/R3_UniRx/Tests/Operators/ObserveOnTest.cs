@@ -18,7 +18,7 @@ namespace R3_UniRx.Tests.Operators
             var fixedUpdateFrameProvider = new FakeFrameProvider();
 
             // Update間隔で値を発行されたイベントを、FixedUpdateタイミングに変更する、みたいな
-            var list = Observable.IntervalFrame(1, updateFrameProvider)
+            using var list = Observable.IntervalFrame(1, updateFrameProvider)
                 .Index() // 連番を振る
                 .ObserveOn(fixedUpdateFrameProvider)
                 .ToLiveList();

@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 最後2Fだけ通過
-            var list = subject.TakeLastFrame(2, fakeFrameProvider).ToLiveList();
+            using var list = subject.TakeLastFrame(2, fakeFrameProvider).ToLiveList();
 
             subject.OnNext(1);
             fakeFrameProvider.Advance();

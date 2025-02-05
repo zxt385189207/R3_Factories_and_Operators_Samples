@@ -15,7 +15,7 @@ namespace R3_UniRx.Tests.Operators
             var subject = new R3.Subject<int>();
 
             // 購読開始から3つだけ通過
-            var list = subject.Take(3).Materialize().ToLiveList();
+            using var list = subject.Take(3).Materialize().ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
@@ -34,7 +34,7 @@ namespace R3_UniRx.Tests.Operators
             var subject = new R3.Subject<int>();
 
             // 購読開始から1秒だけ通過
-            var list = subject.Take(TimeSpan.FromSeconds(1), TimeProvider.System).Materialize().ToLiveList();
+            using var list = subject.Take(TimeSpan.FromSeconds(1), TimeProvider.System).Materialize().ToLiveList();
 
             subject.OnNext(1);
             await Task.Delay(500);

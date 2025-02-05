@@ -32,7 +32,7 @@ namespace R3_UniRx.Tests.Operators
 
             // 遅れてtargetSubjectを購読する
             // Connect以降にparentSubjectに発行された値が流れているはず
-            var list = connectableObservable.ToLiveList();
+            using var list = connectableObservable.ToLiveList();
 
             CollectionAssert.AreEqual(new[] { 4, 5, 6 }, list);
 

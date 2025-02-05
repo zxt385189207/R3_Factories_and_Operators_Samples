@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
             var subject = new R3.Subject<int>();
 
             // 3で割った余り
-            var list = subject.DistinctUntilChangedBy(x => x % 3).ToLiveList();
+            using var list = subject.DistinctUntilChangedBy(x => x % 3).ToLiveList();
 
             subject.OnNext(1); // 1
             subject.OnNext(2); // 2

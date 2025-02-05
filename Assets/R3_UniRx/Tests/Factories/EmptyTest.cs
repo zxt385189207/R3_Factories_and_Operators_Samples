@@ -10,7 +10,7 @@ namespace R3_UniRx.Tests.Factories
         {
             var observable = Observable.Empty<int>();
 
-            var list = observable.Materialize().ToLiveList();
+            using var list = observable.Materialize().ToLiveList();
 
             Assert.AreEqual(1, list.Count);
             Assert.AreEqual(NotificationKind.OnCompleted, list[0].Kind);

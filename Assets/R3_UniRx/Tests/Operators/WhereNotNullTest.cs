@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
         {
             using var subject = new R3.Subject<string?>();
 
-            var list = subject.WhereNotNull().ToLiveList();
+            using var list = subject.WhereNotNull().ToLiveList();
 
             subject.OnNext("a");
             subject.OnNext(null);

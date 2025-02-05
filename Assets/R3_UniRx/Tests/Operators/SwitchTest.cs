@@ -19,7 +19,7 @@ namespace R3_UniRx.Tests.Operators
             var observableSubject = new R3.Subject<Observable<int>>();
 
             // Observable<Observable<int>>を順次購読する
-            var list = observableSubject.Switch().ToLiveList();
+            using var list = observableSubject.Switch().ToLiveList();
 
             // 1つ目のObservableを発行
             observableSubject.OnNext(subject1);

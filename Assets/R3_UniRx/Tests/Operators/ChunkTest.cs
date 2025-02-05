@@ -16,7 +16,7 @@ namespace R3_UniRx.Tests.Operators
             // 2つずつまとめる
             var observable = R3.Observable.Range(1, 5).Chunk(count: 2);
 
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             CollectionAssert.AreEqual(new[]
             {
@@ -34,7 +34,7 @@ namespace R3_UniRx.Tests.Operators
             // ≒ 現在値と一つ前の値をセットにする
             var observable = R3.Observable.Range(1, 5).Chunk(count: 2, skip: 1);
 
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             CollectionAssert.AreEqual(new[]
             {
@@ -53,7 +53,7 @@ namespace R3_UniRx.Tests.Operators
 
             // 100msごとにまとめる
             var observable = subject.Chunk(timeSpan: TimeSpan.FromMilliseconds(100), timeProvider: TimeProvider.System);
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);
@@ -87,7 +87,7 @@ namespace R3_UniRx.Tests.Operators
             using var triggerSubject = new R3.Subject<R3.Unit>();
 
             var observable = baseSubject.Chunk(triggerSubject);
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             baseSubject.OnNext(1);
             baseSubject.OnNext(2);
@@ -126,7 +126,7 @@ namespace R3_UniRx.Tests.Operators
                 // 今回は100ms固定で待機する(valueは使わない）
                 await Task.Delay(TimeSpan.FromMilliseconds(100), ct);
             });
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);

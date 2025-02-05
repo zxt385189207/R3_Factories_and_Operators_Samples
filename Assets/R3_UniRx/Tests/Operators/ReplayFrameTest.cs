@@ -39,7 +39,7 @@ namespace R3_UniRx.Tests.Operators
             parentSubject.OnNext(8); // 今のフレーム ここから3F分の値が記録されている
 
             // 遅れて購読
-            var list = connectableObservable.ToLiveList();
+            using var list = connectableObservable.ToLiveList();
 
             // 直近3Fの値が記録されている
             CollectionAssert.AreEqual(new[] { 6, 7, 8 }, list);

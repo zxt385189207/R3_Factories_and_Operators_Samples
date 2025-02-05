@@ -19,7 +19,7 @@ namespace R3_UniRx.Tests.Operators
             using var subject = new R3.Subject<int>();
 
             // 連続して値が発行された場合は値が落ち着いてから5F後に最後の値を発行する
-            var list = subject.DebounceFrame(5, fakeFrameProvider).ToLiveList();
+            using var list = subject.DebounceFrame(5, fakeFrameProvider).ToLiveList();
 
             // 1F目
             subject.OnNext(1);

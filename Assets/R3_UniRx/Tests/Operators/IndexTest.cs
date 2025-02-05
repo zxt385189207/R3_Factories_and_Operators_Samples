@@ -15,7 +15,7 @@ namespace R3_UniRx.Tests.Operators
             // Subscribe前のOnNextは関係ない
             subject.OnNext("-");
 
-            var list = subject.Index().ToLiveList();
+            using var list = subject.Index().ToLiveList();
 
             subject.OnNext("A");
             subject.OnNext("B");

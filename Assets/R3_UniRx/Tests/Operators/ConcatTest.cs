@@ -13,7 +13,7 @@ namespace R3_UniRx.Tests.Operators
             var firstObservable = R3.Observable.Range(1, 3);
             var secondObservable = R3.Observable.Range(4, 3);
 
-            var list = firstObservable.Concat(secondObservable).ToLiveList();
+            using var list = firstObservable.Concat(secondObservable).ToLiveList();
 
             CollectionAssert.AreEqual(new[] { 1, 2, 3, 4, 5, 6 }, list);
         }

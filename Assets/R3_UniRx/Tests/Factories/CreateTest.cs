@@ -20,7 +20,7 @@ namespace R3_UniRx.Tests.Factories
                 return Disposable.Empty;
             });
 
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             CollectionAssert.AreEqual(new[]
             {
@@ -49,7 +49,7 @@ namespace R3_UniRx.Tests.Factories
                 return Disposable.Empty;
             }, false);
 
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             CollectionAssert.AreEqual(new[]
             {
@@ -75,7 +75,7 @@ namespace R3_UniRx.Tests.Factories
                 observer.OnCompleted();
             });
 
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             CollectionAssert.AreEqual(new[]
             {
@@ -120,7 +120,7 @@ namespace R3_UniRx.Tests.Factories
                 observer.OnCompleted();
             });
 
-            var list = observable.ToLiveList();
+            using var list = observable.ToLiveList();
 
             CollectionAssert.AreEqual(new[]
             {

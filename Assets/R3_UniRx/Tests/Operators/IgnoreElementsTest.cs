@@ -15,7 +15,7 @@ namespace R3_UniRx.Tests.Operators
         {
             using var subject = new R3.Subject<int>();
 
-            var list = subject.IgnoreElements().Materialize().ToLiveList();
+            using var list = subject.IgnoreElements().Materialize().ToLiveList();
 
             subject.OnNext(1);
             subject.OnNext(2);

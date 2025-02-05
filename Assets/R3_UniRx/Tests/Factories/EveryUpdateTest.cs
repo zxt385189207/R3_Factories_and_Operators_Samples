@@ -15,7 +15,7 @@ namespace R3_UniRx.Tests.Factories
             // FakeFrameProviderを使って毎フレームUnitを発行するObservableを作成する
             var observable = Observable.EveryUpdate(fakeFrameProvider, cts.Token);
 
-            var list = observable.Materialize().ToLiveList();
+            using var list = observable.Materialize().ToLiveList();
 
             // まだフレームが進んでいないのでOnNextもOnCompletedも発行されない
             CollectionAssert.IsEmpty(list);
