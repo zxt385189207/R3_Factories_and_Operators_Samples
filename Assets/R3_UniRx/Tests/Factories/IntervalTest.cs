@@ -24,8 +24,7 @@ namespace R3_UniRx.Tests.Factories
             await Observable.Interval(interval, TimeProvider.System, ct)
                 .Timestamp(TimeProvider.System)
                 .Take(3)
-                .Materialize()
-                .ForEachAsync(x => results.Add(x.Value.Timestamp), ct);
+                .ForEachAsync(x => results.Add(x.Timestamp), ct);
             
             // だいたい100msごとに値が発行されている
             Assert.AreEqual(3, results.Count);

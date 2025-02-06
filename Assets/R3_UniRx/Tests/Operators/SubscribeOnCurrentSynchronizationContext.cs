@@ -12,6 +12,9 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_SubscribeOnCurrentSynchronizationContext_現在のSynchronizationContext上で購読を行う()
         {
+            using var cts = new CancellationTokenSource();
+            var ct = cts.Token;
+            
             // メインスレッドのIDを取得する
             var mainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -38,8 +41,8 @@ namespace R3_UniRx.Tests.Operators
                 Assert.IsTrue(threadPoolThreadId != mainThreadId);
 
                 // スレッドプール上で購読
-                await observable.ForEachAsync(x => result = x);
-            });
+                await observable.ForEachAsync(x => result = x, cancellationToken: ct);
+            }, cancellationToken: ct);
 
             // メインスレッド上で購読されたので、メインスレッドのIDが入っている
             Assert.AreEqual(result, mainThreadId);

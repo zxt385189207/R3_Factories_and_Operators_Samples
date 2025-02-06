@@ -12,6 +12,9 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_SubscribeOnMainThread_メインスレッド上で購読を行う()
         {
+            using var cts = new CancellationTokenSource();
+            var ct = cts.Token;
+            
             // メインスレッドのIDを取得する
             var mainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -34,8 +37,8 @@ namespace R3_UniRx.Tests.Operators
                         return R3.Observable.Return(observableCreationId);
                     })
                     .SubscribeOnMainThread() // メインスレッド上でSubscribeすることになる
-                    .ForEachAsync(x => result = x);
-            });
+                    .ForEachAsync(x => result = x, cancellationToken: ct);
+            }, cancellationToken: ct);
 
             // メインスレッド上で購読されたので、メインスレッドのIDが入っている
             Assert.AreEqual(result, mainThreadId);

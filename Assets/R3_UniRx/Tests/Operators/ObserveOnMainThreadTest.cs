@@ -11,6 +11,9 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_ObserveOnMainThread_実行コンテキストをUnityメインスレッドへ変更する()
         {
+            using var cts = new CancellationTokenSource();
+            var ct = cts.Token;
+            
             // メインスレッドId
             var mainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -31,7 +34,7 @@ namespace R3_UniRx.Tests.Operators
                 })
                 .Do(x => publishThreadId = x)
                 .ObserveOnMainThread()
-                .ForEachAsync(x => subscribeThreadId = Thread.CurrentThread.ManagedThreadId);
+                .ForEachAsync(x => subscribeThreadId = Thread.CurrentThread.ManagedThreadId, cancellationToken: ct);
 
             // 発行元と受信側は違うスレッド
             Assert.AreNotEqual(publishThreadId, subscribeThreadId);

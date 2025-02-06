@@ -15,6 +15,9 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_SubscribeOn_指定したSynchronizationContext上で購読を行う()
         {
+            using var cts = new CancellationTokenSource();
+            var ct = cts.Token;
+            
             // Unityが用意しているメインスレッド用のSynchronizationContextを取得する
             var currentSyncContext = SynchronizationContext.Current;
 
@@ -40,8 +43,8 @@ namespace R3_UniRx.Tests.Operators
                         return R3.Observable.Return(observableCreationId);
                     })
                     .SubscribeOn(currentSyncContext) // SyncContextを指定する、すなわちメインスレッド上でSubscribeすることになる
-                    .ForEachAsync(x => result = x);
-            });
+                    .ForEachAsync(x => result = x, cancellationToken: ct);
+            }, cancellationToken: ct);
 
             // メインスレッド上で購読されたので、メインスレッドのIDが入っている
             Assert.AreEqual(result, mainThreadId);
@@ -50,6 +53,9 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_SubscribeOn_指定したFrameProvider上で購読を行う()
         {
+            using var cts = new CancellationTokenSource();
+            var ct = cts.Token;
+            
             // Fakeだけど、UnityのFrameProviderと仮定する
             // Advance()を実行したコンテキストでSubscribeが実行される
             var fakeFrameProvider = new FakeFrameProvider();
@@ -77,7 +83,7 @@ namespace R3_UniRx.Tests.Operators
                     })
                     .SubscribeOn(fakeFrameProvider) // SyncContextを指定する、すなわちメインスレッド上でSubscribeすることになる
                     .Subscribe(x => result = x);
-            });
+            }, cancellationToken: ct);
 
             // まだSubscribeされてない
             Assert.AreEqual(-1, result);
@@ -92,6 +98,9 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_SubscribeOn_指定したTimeProvider上で購読を行う()
         {
+            using var cts = new CancellationTokenSource();
+            var ct = cts.Token;
+            
             // メインスレッドのIDを取得する
             var mainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -114,8 +123,8 @@ namespace R3_UniRx.Tests.Operators
                         return R3.Observable.Return(observableCreationId);
                     })
                     .SubscribeOn(UnityTimeProvider.Update) // UnityのUpdateを指定する、すなわちメインスレッド上でSubscribeすることになる
-                    .ForEachAsync(x => result = x);
-            });
+                    .ForEachAsync(x => result = x, cancellationToken: ct);
+            }, cancellationToken: ct);
 
             
             // メインスレッド上で購読されたので、メインスレッドのIDが入っている

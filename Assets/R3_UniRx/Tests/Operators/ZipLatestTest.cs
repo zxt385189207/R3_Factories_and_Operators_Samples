@@ -5,7 +5,7 @@ using UniRx;
 
 namespace R3_UniRx.Tests.Operators
 {
-    public sealed class ZipLatestLatestTest
+    public sealed class ZipLatestTest
     {
         [Test]
         public void R3_ZipLatest_複数のObservableの値が揃ったら1つメッセージを発行する()

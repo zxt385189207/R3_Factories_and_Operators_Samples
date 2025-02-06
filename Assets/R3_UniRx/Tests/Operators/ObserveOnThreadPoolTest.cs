@@ -11,6 +11,9 @@ namespace R3_UniRx.Tests.Operators
         [Test]
         public async Task R3_ObserveOnThreadPool_実行コンテキストをスレッドプールに切り替える()
         {
+            using var cts = new CancellationTokenSource();
+            var ct = cts.Token;
+            
             // メインスレッドId
             var mainThreadId = Thread.CurrentThread.ManagedThreadId;
 
@@ -20,7 +23,7 @@ namespace R3_UniRx.Tests.Operators
             var task = subject
                 .ObserveOnThreadPool()
                 .Select(_ => Thread.CurrentThread.ManagedThreadId)
-                .FirstAsync();
+                .FirstAsync(cancellationToken: ct);
 
             // メインスレッドで発行
             subject.OnNext(R3.Unit.Default);
