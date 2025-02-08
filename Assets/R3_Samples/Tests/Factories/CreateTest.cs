@@ -30,7 +30,10 @@ namespace R3_Samples.Tests.Factories
             }, list);
         }
 
-        private record Data(int Value);
+        private record Data(int Value)
+        {
+            public int Value { get; } = Value;
+        }
 
         [Test]
         public void Create_手続き的に値を発行するObservableを作成する_同期_State()
