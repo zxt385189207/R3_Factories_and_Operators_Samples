@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace R3_Samples.DemoScenes.Scripts
+namespace R3_Samples.DemoScenes
 {
     public class AsyncSlider : MonoBehaviour
     {

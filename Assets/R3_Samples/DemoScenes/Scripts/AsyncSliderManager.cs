@@ -2,7 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace R3_Samples.DemoScenes.Scripts
+namespace R3_Samples.DemoScenes
 {
     public class AsyncSliderManager : MonoBehaviour
     {

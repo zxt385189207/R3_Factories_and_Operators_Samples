@@ -6,8 +6,50 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/R3_Samples/DemoScenes/MainScene.unity
+    guid: 573acefa953d020438eda3d6b4a37d6c
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/AwaitDropScene.unity
+    guid: 6fd42cebe1f430e49bf3612cba375cbd
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/AwaitParallelScene.unity
+    guid: 86de6b6d1369d7941a8236dde64ba814
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/AwaitSequentialParallelScene.unity
+    guid: 8b57be2a665c4b044b0b3db3de17c068
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/AwaitSequentialScene.unity
+    guid: b9fa4966a0e5862478f00b8a5a8d5752
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/AwaitSwitchScene.unity
+    guid: 9cbbb7a7407c5434289be68c13f6d3e2
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/AwaitThrottleFirstLastScene.unity
+    guid: 82df00ba4c9dd7945975939f2ba39228
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/CombineLatestScene.unity
+    guid: 85d81ad0921a59241b707cb5c5d6371c
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/DebounceScene.unity
+    guid: f4b42f1f07ce5ed4c8a05773518c02de
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/ThrottleFirstLastScene.unity
+    guid: 9482ca16613df4e47977eed1efb57f17
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/ThrottleFirstScene.unity
+    guid: 0cd047bbda4bb60498131c085f025c1d
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/ThrottleLastScene.unity
+    guid: c7ecc579d94b9ff4ca2af97a37ed1720
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/WithLatestFromScene.unity
+    guid: 8ca1317eaad810f4a8bdf34c8d865089
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/ZipLatestScene.unity
+    guid: e02e9733b4f876440a9695aae935d317
+  - enabled: 1
+    path: Assets/R3_Samples/DemoScenes/SubScenes/ZipScene.unity
+    guid: 61f5791d760a90a47bf4440276e2240c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

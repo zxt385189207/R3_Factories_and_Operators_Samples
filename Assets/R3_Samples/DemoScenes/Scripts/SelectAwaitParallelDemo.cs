@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace R3_Samples.DemoScenes
 {
-    public class ThrottleFirstDemo : MonoBehaviour
+    public class SelectAwaitParallelDemo : MonoBehaviour
     {
         [SerializeField] private Button _onNextButton;
         [SerializeField] private Text _resultsText;
@@ -32,8 +32,12 @@ namespace R3_Samples.DemoScenes
 
 
             _inputSubject
-                .ThrottleFirst((x, ct) =>
-                    _asyncSliderManager.AddNewAsyncSliderAsync(Random.Range(0.5f, 2.0f), x.ToString(), ct))
+                .SelectAwait(async (x, ct) =>
+                {
+                    var randomDelay = Random.Range(0.5f, 2.0f);
+                    await _asyncSliderManager.AddNewAsyncSliderAsync(randomDelay, x.ToString(), ct);
+                    return x + 100;
+                }, AwaitOperation.Parallel)
                 .Subscribe(x =>
                 {
                     _results.AddResult(x.ToString());

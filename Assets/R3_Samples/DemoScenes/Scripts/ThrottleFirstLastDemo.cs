@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace R3_Samples.DemoScenes
 {
-    public class ThrottleFirstDemo : MonoBehaviour
+    public class ThrottleFirstLastDemo : MonoBehaviour
     {
         [SerializeField] private Button _onNextButton;
         [SerializeField] private Text _resultsText;
@@ -32,7 +32,7 @@ namespace R3_Samples.DemoScenes
 
 
             _inputSubject
-                .ThrottleFirst((x, ct) =>
+                .ThrottleFirstLast((x, ct) =>
                     _asyncSliderManager.AddNewAsyncSliderAsync(Random.Range(0.5f, 2.0f), x.ToString(), ct))
                 .Subscribe(x =>
                 {

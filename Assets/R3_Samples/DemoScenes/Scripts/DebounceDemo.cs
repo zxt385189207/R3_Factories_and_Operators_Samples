@@ -1,9 +1,8 @@
-using System.Text;
 using R3;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace R3_Samples.DemoScenes.Scripts
+namespace R3_Samples.DemoScenes
 {
     public class DebounceDemo : MonoBehaviour
     {
@@ -12,7 +11,7 @@ namespace R3_Samples.DemoScenes.Scripts
         [SerializeField] private AsyncSliderManager _asyncSliderManager;
         [SerializeField] private Text _inputText;
 
-        private readonly StringBuilder _results = new StringBuilder();
+        private readonly ResultText _results = new(10);
         private int _inputValue = 0;
         private readonly Subject<int> _inputSubject = new Subject<int>();
 
@@ -33,11 +32,12 @@ namespace R3_Samples.DemoScenes.Scripts
 
 
             _inputSubject
-                .Debounce((x, ct) => _asyncSliderManager.AddNewAsyncSliderAsync(1, x.ToString(), ct))
+                .Debounce((x, ct) =>
+                    _asyncSliderManager.AddNewAsyncSliderAsync(Random.Range(0.5f, 2.0f), x.ToString(), ct))
                 .Subscribe(x =>
                 {
-                    _results.AppendLine(x.ToString());
-                    _resultsText.text = _results.ToString();
+                    _results.AddResult(x.ToString());
+                    _resultsText.text = _results.ToText();
                 })
                 .AddTo(this);
         }
