@@ -3,7 +3,7 @@ using R3;
 
 namespace R3_Samples.Tests.Operators
 {
-    public sealed class ToLiveList
+    public sealed class ToLiveListTest
     {
         [Test]
         public void R3_ToLiveList_LiveListに変換する()
