@@ -5,7 +5,7 @@ using UniRx;
 
 namespace R3_Samples.Tests.Operators
 {
-    public class DefaultIfEmpty
+    public class DefaultIfEmptyTest
     {
         [Test]
         public async Task R3_DefaultIfEmpty_Observableが空のときに指定した値を発行する()
