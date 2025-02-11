@@ -10,7 +10,7 @@ namespace R3_Samples.Tests.Operators
     /*
      * 補足: Observable.Return()は購読した瞬間に同期的にOnNextを発行する
      */
-    public sealed class SubscribeOn
+    public sealed class SubscribeOnTest
     {
         [Test]
         public async Task R3_SubscribeOn_指定したSynchronizationContext上で購読を行う()
