@@ -6,7 +6,7 @@ using R3;
 
 namespace R3_Samples.Tests.Operators
 {
-    public sealed class SubscribeOnCurrentSynchronizationContext
+    public sealed class SubscribeOnCurrentSynchronizationContextTest
     {
         [Test]
         public async Task R3_SubscribeOnCurrentSynchronizationContext_現在のSynchronizationContext上で購読を行う()
