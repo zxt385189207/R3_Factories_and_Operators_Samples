@@ -34,6 +34,7 @@ namespace R3_Samples.DemoScenes
             _inputSubject
                 .Debounce((x, ct) =>
                     _asyncSliderManager.AddNewAsyncSliderAsync(Random.Range(0.5f, 2.0f), x.ToString(), ct))
+                .IgnoreOnErrorResume()
                 .Subscribe(x =>
                 {
                     _results.AddResult(x.ToString());
