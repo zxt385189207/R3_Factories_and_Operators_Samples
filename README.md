@@ -1,6 +1,6 @@
 # これは何
 
-[R3](https://github.com/Cysharp/R3)のオペレータやファクトリメソッドの挙動を説明するための実装やテストをまとめたプロジェクトです。
+[R3](https://github.com/Cysharp/R3)のオペレータやファクトリメソッドの挙動を説明するための実装やテストをまとめたプロジェクトです。[R3 オペレーター/ファクトリーメソッド まとめ](https://qiita.com/toRisouP/items/3d045aa248824571b809)の記事を参考にしながらこのリポジトリを参照すると理解が深まります。
 
 またDEMOシーンは[こちら](https://torisoup.github.io/R3_Factories_and_Operators_Samples/)で動作を試すことができます。
 
