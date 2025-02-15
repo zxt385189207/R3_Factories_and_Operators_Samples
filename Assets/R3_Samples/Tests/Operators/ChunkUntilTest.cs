@@ -1,0 +1,52 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using NUnit.Framework;
+using R3;
+using UniRx;
+
+namespace R3_Samples.Tests.Operators
+{
+    public class ChunkUntilTest
+    {
+        [Test]
+        public void R3_ChunkUntil_countを指定して値をまとめる()
+        {
+            using var subject = new R3.Subject<string>();
+
+            // "."が出現するまでの値をまとめる
+            using var liveList = subject.ChunkUntil(x => x == ".").ToLiveList();
+
+            subject.OnNext("Hello, ");
+            subject.OnNext("World");
+            subject.OnNext(".");
+            subject.OnNext("This ");
+            subject.OnNext("is ");
+            subject.OnNext("R3");
+            subject.OnNext(".");
+            subject.OnCompleted();
+
+            Assert.AreEqual(2, liveList.Count);
+
+            var firstChunk = liveList[0].ToArray();
+            Assert.AreEqual(3, firstChunk.Length);
+            Assert.AreEqual("Hello, ", firstChunk[0]);
+            Assert.AreEqual("World", firstChunk[1]);
+            Assert.AreEqual(".", firstChunk[2]);
+
+            var secondChunk = liveList[1].ToArray();
+            Assert.AreEqual(4, secondChunk.Length);
+            Assert.AreEqual("This ", secondChunk[0]);
+            Assert.AreEqual("is ", secondChunk[1]);
+            Assert.AreEqual("R3", secondChunk[2]);
+            Assert.AreEqual(".", secondChunk[3]);
+        }
+
+
+        [Test]
+        public void UniRx_ChunkUntil相当は存在しない()
+        {
+            Assert.Ignore();
+        }
+    }
+}
