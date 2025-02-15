@@ -10,7 +10,7 @@ namespace R3_Samples.Tests.Operators
     public class ChunkUntilTest
     {
         [Test]
-        public void R3_ChunkUntil_countを指定して値をまとめる()
+        public void R3_ChunkUntil_条件を満たすまで値をまとめる()
         {
             using var subject = new R3.Subject<string>();
 
